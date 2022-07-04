@@ -28,7 +28,6 @@ const AddDragon: React.FC = () => {
   useEffect(() => {
     if (params.id) {
       getDragonsById(params.id).then((response) => {
-        console.log("by id", response);
         setForm(response);
       });
     }
