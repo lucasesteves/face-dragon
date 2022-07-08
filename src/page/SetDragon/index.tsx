@@ -25,13 +25,16 @@ const AddDragon: React.FC = () => {
   const isEdit: boolean = pathname.includes("edit");
   const isReadOnly: boolean = pathname.includes("detail");
 
+  const fetchDragonsById = async () => {
+    const response = await getDragonsById(params.id);
+    setForm(response);
+  };
+
   useEffect(() => {
-    if (params.id) {
-      getDragonsById(params.id).then((response) => {
-        setForm(response);
-      });
+    if (!!params.id) {
+      fetchDragonsById();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

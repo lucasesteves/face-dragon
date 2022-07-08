@@ -3,26 +3,30 @@ import * as S from "./styles";
 import { Header, CircularButton } from "../../components";
 import { useHistory } from "react-router-dom";
 import { useLogin, useRequest } from "../../hooks";
-import {removeData} from "../../utils"
+import { removeData } from "../../utils";
+import { ordenation } from "../../utils/react";
 
-interface DragonsProps {
+export interface DragonsProps {
   id: string;
   name: string;
   createdAt: string;
   type: string;
 }
 
-const Books: React.FC = () => {
+const Panel: React.FC = () => {
   const history = useHistory();
-  const { setUser } = useLogin()
+  const { setUser } = useLogin();
   const { getDragons, deleteDragon } = useRequest();
   const [dragons, setDragons] = useState<DragonsProps[]>([]);
 
+  const fetchDragons = async () => {
+    const response = await getDragons();
+    setDragons(response.sort(ordenation));
+  };
+
   useEffect(() => {
-    getDragons().then((response) => {
-      setDragons(response);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchDragons();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -38,7 +42,6 @@ const Books: React.FC = () => {
                 history.push(`/panel/detail/${item.id}`);
               }}
             >
-              {/* {`${asd.toISOString()}`} */}
               Detail
             </S.Button>
             <S.Button
@@ -70,8 +73,8 @@ const Books: React.FC = () => {
       <CircularButton
         direction="left"
         onClick={() => {
-          removeData()
-          setUser("")
+          removeData();
+          setUser("");
           history.push("/");
         }}
       >
@@ -88,4 +91,4 @@ const Books: React.FC = () => {
   );
 };
 
-export default Books;
+export default Panel;
